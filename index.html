@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Monitoring Sensus Ekonomi 2026</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-orange: #F26522;
+      --light-orange: #fff3ed;
+      --dark-orange: #d84a00;
+    }
+    body {
+      background: linear-gradient(135deg, #F26522 0%, #ff8c5a 100%);
+      background-attachment: fixed;
+      font-family: 'Poppins', sans-serif;
+      padding-top: 20px;
+      padding-bottom: 50px;
+    }
+    .main-container {
+      background-color: #ffffff;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+    }
+    .header-title {
+      color: #2c3e50;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .subtitle {
+      color: #7f8c8d;
+      text-align: center;
+      font-weight: 500;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .status-card {
+      background-color: var(--light-orange);
+      border-left: 5px solid var(--primary-orange);
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: var(--dark-orange);
+      text-align: center;
+      max-width: 550px;
+      margin: 15px auto;
+      font-size: 0.95rem;
+    }
+    .status-card .kondisi {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #f5c2aa;
+      color: #555;
+      font-weight: 500;
+    }
+    .target-text {
+      margin-top: 8px;
+      color: #e74c3c;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .section-title {
+      border-bottom: 3px solid var(--light-orange);
+      padding-bottom: 10px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      color: var(--primary-orange);
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+    .accordion-item {
+      border: 1px solid #eee;
+      border-radius: 10px !important;
+      margin-bottom: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .accordion-button {
+      background-color: #fcfcfc;
+      padding: 15px 20px;
+    }
+    .accordion-button:not(.collapsed) {
+      background-color: var(--light-orange);
+      color: #333;
+      box-shadow: none;
+    }
+    .accordion-button:focus { box-shadow: none; border-color: rgba(242, 101, 34, 0.5); }
+    .stat-badge {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      color: #555;
+    }
+    .table-responsive {
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    .custom-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #eaedf1;
+    }
+    .custom-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background-color: var(--light-orange) !important;
+      color: var(--dark-orange);
+      font-weight: 600;
+      border-bottom: none;
+      padding: 12px 15px;
+      white-space: nowrap;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .custom-table tbody td {
+      padding: 12px 15px;
+      vertical-align: middle;
+      border-bottom: 1px solid #eaedf1;
+      color: #4a5568;
+      white-space: nowrap;
+    }
+    .custom-table tbody tr:not(.table-success):not(.table-danger):hover { background-color: #fff3ed !important; }
+    .custom-table tbody tr:last-child td { border-bottom: none; }
+    
+    .clickable-row {
+      cursor: pointer;
+      transition: background-color 0.2s ease, filter 0.2s ease;
+    }
+    .clickable-row:hover {
+      filter: brightness(0.95);
+    }
+    .modal-detail-table th {
+      color: #666;
+      font-weight: 600;
+      width: 40%;
+      border: none !important;
+      padding: 12px 15px;
+    }
+    .modal-detail-table td {
+      color: #222;
+      font-weight: 600;
+      border: none !important;
+      padding: 12px 15px;
+    }
+    .modal-detail-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-header-custom {
+      color: var(--dark-orange);
+      font-weight: 700;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .target-badge {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container main-container">
+  
+  <h2 class="header-title">Monitoring Petugas Sensus Ekonomi 2026<br>Kecamatan Narmada Kabupaten Lombok Barat</h2>
+  <h5 class="subtitle">Pendataan 15 Juni 2026 hingga 31 Agustus 2026</h5>
+  
+  <div class="status-card" id="statusArea">
+    <div id="countdownText"><i class="fa-solid fa-clock"></i> Menghitung sisa waktu...</div>
+    <div class="kondisi" id="kondisiUpdate">Kondisi Update : Mengambil data...</div>
+    <div class="target-text">Target harian yang harus dicapai adalah 12 Keluarga/Usaha/Bangunan per hari (status sudah disubmit)</div>
+  </div>
+
+  <div id="loader" class="text-center my-5">
+    <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status"></div>
+    <h5 class="mt-3" style="color: white;">Sinkronisasi data...</h5>
+  </div>
+
+  <div id="mainContent" style="display: none;">
+    
+    <h4 class="section-title"><i class="fa-solid fa-users-gear"></i> Ringkasan Progress per PML</h4>
+    <div class="accordion mb-3" id="pmlAccordion"></div>
+    <div class="text-center mt-3 mb-5" id="btnSeeMoreContainer" style="display: none;">
+      <button id="btnToggleView" class="btn btn-outline-warning rounded-pill px-4 fw-bold" style="color: var(--primary-orange); border-color: var(--primary-orange); background-color: #fff;">
+        Lihat Selengkapnya <i class="fa-solid fa-chevron-down ms-1"></i>
+      </button>
+    </div>
+
+    <h4 class="section-title"><i class="fa-solid fa-table-list"></i> Detail Progress Keseluruhan PCL</h4>
+    
+    <div class="row mb-3">
+      <div class="col-md-6 mb-2">
+        <label class="form-label fw-bold text-secondary small">Filter Nama PML</label>
+        <select id="filterPML" class="form-select border-warning">
+          <option value="">-- Semua PML --</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-2">
+        <label class="form-label fw-bold text-secondary small">Filter Nama PCL</label>
+        <select id="filterPCL" class="form-select border-warning">
+          <option value="">-- Semua PCL --</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table id="pclTable" class="table custom-table table-hover" style="width:100%">
+        <thead>
+          <tr>
+            <th class="text-center">No</th>
+            <th>Nama PCL</th>
+            <th>Nama PML</th>
+            <th>PROGRESS</th>
+            <th>Jml SLS</th>
+            <th>Total Unit</th>
+            <th>Belum Didata</th>
+            <th>Sedang Didata</th>
+            <th>Selesai Didata</th>
+            <th>Draft</th>
+            <th>Submitted</th>
+            <th>Apprv PML</th>
+            <th>Apprv KabKot</th>
+          </tr>
+        </thead>
+        <tbody id="pclTableBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content" style="border-radius: 12px; border: none;">
+      <div class="modal-header modal-header-custom p-4">
+        <h4 class="modal-title w-100" id="detailModalLabel">Data Detail Progress PCL</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 pt-2">
+        <div class="table-responsive">
+          <table class="table modal-detail-table">
+            <tbody id="modalBodyContent"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+  // ==============================================================
+  // URL WEB APP APPS SCRIPT ANDA DI SINI
+  // ==============================================================
+  const API_URL = "https://script.google.com/macros/s/AKfycbxuJzcnZJByC9E4NcCfgHkpt4IGcOg_0bpLaGyype9Ww-777qi1cdZ8t3desyoEPWE/exec"; 
+  
+  let isExpanded = false;
+  window.pclDataMap = []; 
+
+  $(document).ready(function() {
+    calculateCountdown();
+    fetchData();
+
+    $('#btnToggleView').click(function() {
+      if (!isExpanded) {
+        $('.pml-item').fadeIn();
+        $(this).html('Tampilkan Lebih Sedikit <i class="fa-solid fa-chevron-up ms-1"></i>');
+        isExpanded = true;
+      } else {
+        resetTop5View();
+        $(this).html('Lihat Selengkapnya <i class="fa-solid fa-chevron-down ms-1"></i>');
+        isExpanded = false;
+      }
+    });
+  });
+
+  function calculateCountdown() {
+    const endDate = new Date("August 31, 2026 23:59:59").getTime();
+    const now = new Date().getTime();
+    const distance = endDate - now;
+    let daysLeft = Math.ceil(distance / (1000 * 60 * 60 * 24));
+    
+    let countdownText = "";
+    if (daysLeft > 0) { countdownText = `Sisa hari pendataan: <b>${daysLeft} Hari</b>`; } 
+    else if (daysLeft === 0) { countdownText = `Hari ini adalah hari terakhir pendataan!`; } 
+    else { countdownText = `Periode pendataan telah berakhir.`; }
+    
+    $('#countdownText').html(`<i class="fa-solid fa-calendar-days"></i> ${countdownText}`);
+  }
+
+  function getTargetKumulatif() {
+    let startDate = new Date(2026, 5, 15); 
+    startDate.setHours(0,0,0,0);
+    let today = new Date();
+    today.setHours(0,0,0,0);
+    
+    if (today < startDate) return 0;
+    
+    let endDate = new Date(2026, 7, 31); 
+    endDate.setHours(0,0,0,0);
+    
+    let calcDate = today > endDate ? endDate : today;
+    let timeDiff = calcDate - startDate;
+    let dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+    
+    return dayDiff * 12;
+  }
+
+  // DI SINI PERUBAHANNYA: Menggunakan metode fetch() ke API
+  function fetchData() {
+    fetch(API_URL)
+      .then(response => {
+        if (!response.ok) throw new Error("Jaringan bermasalah atau URL API salah.");
+        return response.json();
+      })
+      .then(data => processData(data))
+      .catch(err => $('#loader').html(`<div class="alert alert-danger">Gagal memuat: ${err.message}</div>`));
+  }
+
+  function formatProgress(val) {
+    if (!val) return "0.00";
+    let num = parseFloat(val.toString().replace(',', '.').replace('%', ''));
+    if (isNaN(num)) return "0.00";
+    return (num * 100).toFixed(2);
+  }
+
+  function processData(data) {
+    if(data.error) {
+      $('#loader').html(`<div class="alert alert-danger">Error: ${data.error}</div>`); return;
+    }
+
+    let kondisiVal = (data[0] && data[0]['Kondisi']) ? data[0]['Kondisi'] : "Belum ada update kondisi.";
+    $('#kondisiUpdate').html(`<b>Kondisi Update :</b> ${kondisiVal}`);
+
+    let pmlMap = {};
+    window.pclDataMap = []; 
+    let currentTargetKumulatif = getTargetKumulatif(); 
+
+    let uniquePMLs = new Set();
+    let uniquePCLs = new Set();
+    
+    data.forEach(row => {
+      let pml = row['Nama PML'] || "Tanpa PML";
+      let pcl = row['Nama PCL'] || "Tanpa PCL";
+      
+      uniquePMLs.add(pml);
+      if(row['Nama PCL']) uniquePCLs.add(pcl);
+
+      if (!pmlMap[pml]) pmlMap[pml] = [];
+      pmlMap[pml].push(row);
+    });
+
+    Array.from(uniquePMLs).sort().forEach(p => $('#filterPML').append(`<option value="${p}">${p}</option>`));
+    Array.from(uniquePCLs).sort().forEach(p => $('#filterPCL').append(`<option value="${p}">${p}</option>`));
+
+    let pmlArray = [];
+    let mainTableHtml = '';
+    let collapseIdCounter = 1;
+
+    for (const [pmlName, pcls] of Object.entries(pmlMap)) {
+      
+      let sumSls = 0, sumTotal = 0, sumBelum = 0, sumSedang = 0, sumSelesai = 0;
+      let pclTableRows = '';
+
+      pcls.forEach(pcl => {
+        sumSls += parseInt(pcl['jumlah_sls']) || 0;
+        sumTotal += parseInt(pcl['total_unit_pendataan']) || 0;
+        sumBelum += parseInt(pcl['belum_didata']) || 0;
+        sumSedang += parseInt(pcl['sedang_didata']) || 0;
+        sumSelesai += parseInt(pcl['selesai_didata']) || 0;
+      });
+
+      pcls.sort((a, b) => {
+        let selesaiA = parseInt(a['selesai_didata']) || 0;
+        let selesaiB = parseInt(b['selesai_didata']) || 0;
+        return selesaiA - selesaiB;
+      });
+
+      pcls.forEach((pcl, indexUrut) => {
+        let selesaiPcl = parseInt(pcl['selesai_didata']) || 0;
+        let progFormatted = formatProgress(pcl['PROGRESS']);
+
+        let targetText = "";
+        let badgeColor = "";
+        let rowBgClass = "";
+        
+        if (selesaiPcl >= currentTargetKumulatif) {
+          targetText = `Target tercapai minimal ${currentTargetKumulatif} per hari ini`;
+          badgeColor = "bg-success";   
+          rowBgClass = "table-success"; 
+        } else {
+          targetText = `Target tidak tercapai minimal ${currentTargetKumulatif} per hari ini`;
+          badgeColor = "bg-danger";    
+          rowBgClass = "table-danger";  
+        }
+
+        let detailData = {
+          namaPCL: pcl['Nama PCL'] || '-',
+          namaPML: pmlName,
+          progress: progFormatted,
+          jmlSls: pcl['jumlah_sls'] || '0',
+          totalUnit: pcl['total_unit_pendataan'] || '0',
+          belum: pcl['belum_didata'] || '0',
+          sedang: pcl['sedang_didata'] || '0',
+          selesai: pcl['selesai_didata'] || '0',
+          draft: pcl['draft'] || '0',
+          submitted: pcl['submitted'] || '0',
+          apprvPml: pcl['approved_pml'] || '0',
+          apprvKabkot: pcl['approved_kabkot'] || '0'
+        };
+        
+        window.pclDataMap.push(detailData);
+        let dataIndex = window.pclDataMap.length - 1;
+
+        let pclNameCellHtml = `
+          <div class="text-primary fw-bold mb-1">${detailData.namaPCL} <i class="fa-solid fa-arrow-up-right-from-square text-muted ms-1" style="font-size: 0.7rem;"></i></div>
+          <div style="font-size: 0.8rem; color: #555;">
+            Target Harian per Hari Ini total <b>${detailData.selesai}</b> selesai didata<br>
+            <span class="target-badge text-white ${badgeColor}">${targetText}</span>
+          </div>
+        `;
+
+        pclTableRows += `
+          <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik untuk melihat detail lengkap">
+            <td class="text-center fw-bold align-middle">${indexUrut + 1}</td>
+            <td>${pclNameCellHtml}</td>
+            <td class="fw-bold text-success align-middle">${progFormatted}</td>
+            <td class="align-middle">${detailData.jmlSls}</td>
+            <td class="align-middle">${detailData.totalUnit}</td>
+            <td class="align-middle">${detailData.belum}</td>
+            <td class="align-middle">${detailData.sedang}</td>
+            <td class="align-middle">${detailData.selesai}</td>
+          </tr>
+        `;
+
+        mainTableHtml += `
+          <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik untuk melihat detail lengkap">
+            <td class="text-center fw-bold align-middle"></td> 
+            <td>${pclNameCellHtml}</td>
+            <td class="align-middle fw-bold">${pmlName}</td>
+            <td class="fw-bold text-success align-middle">${progFormatted}</td>
+            <td class="align-middle">${detailData.jmlSls}</td>
+            <td class="align-middle">${detailData.totalUnit}</td>
+            <td class="align-middle">${detailData.belum}</td>
+            <td class="align-middle">${detailData.sedang}</td>
+            <td class="align-middle">${detailData.selesai}</td>
+            <td class="align-middle">${detailData.draft}</td>
+            <td class="align-middle">${detailData.submitted}</td>
+            <td class="align-middle">${detailData.apprvPml}</td>
+            <td class="align-middle">${detailData.apprvKabkot}</td>
+          </tr>
+        `;
+      });
+
+      let collapseId = 'collapse' + collapseIdCounter;
+
+      let htmlItem = `
+        <div class="accordion-item pml-item">
+          <h2 class="accordion-header" id="heading${collapseId}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+              <div class="d-flex flex-column w-100 me-3">
+                <div class="fs-5 fw-bold text-dark"><i class="fa-solid fa-user-tie text-secondary me-2"></i> ${pmlName}</div>
+                <div class="d-flex flex-wrap gap-2 mt-2">
+                  <span class="stat-badge"><i class="fa-solid fa-map-location-dot text-primary"></i> Jml SLS: <b>${sumSls}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-building text-info"></i> Total Unit: <b>${sumTotal}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-hourglass-start text-danger"></i> Belum: <b>${sumBelum}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-spinner text-warning"></i> Sedang: <b>${sumSedang}</b></span>
+                  <span class="stat-badge bg-success text-white border-success"><i class="fa-solid fa-check-circle text-white"></i> Selesai: <b>${sumSelesai}</b></span>
+                </div>
+              </div>
+            </button>
+          </h2>
+          <div id="${collapseId}" class="accordion-collapse collapse" data-bs-parent="#pmlAccordion">
+            <div class="accordion-body p-0">
+              <div class="table-responsive">
+                <table class="table custom-table table-hover mb-0" style="border-radius:0; border:none;">
+                  <thead style="background-color: #f1f5f9 !important;">
+                    <tr>
+                      <th class="text-center">No</th>
+                      <th>Nama PCL</th>
+                      <th>PROGRESS</th>
+                      <th>Jml SLS</th>
+                      <th>Total Unit</th>
+                      <th>Belum</th>
+                      <th>Sedang</th>
+                      <th>Selesai</th>
+                    </tr>
+                  </thead>
+                  <tbody>${pclTableRows}</tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      pmlArray.push({ html: htmlItem, totalSelesai: sumSelesai });
+      collapseIdCounter++;
+    }
+
+    pmlArray.sort((a, b) => b.totalSelesai - a.totalSelesai);
+
+    let finalAccordionHtml = pmlArray.map(item => item.html).join('');
+    $('#pmlAccordion').html(finalAccordionHtml);
+    $('#pclTableBody').html(mainTableHtml);
+
+    resetTop5View();
+
+    $('#loader').hide();
+    $('#mainContent').fadeIn();
+
+    var table = $('#pclTable').DataTable({
+      "order": [[ 8, "asc" ]], 
+      "pageLength": 15,
+      "language": {
+        "search": "Cari Data:",
+        "lengthMenu": "Tampil _MENU_ data",
+        "zeroRecords": "Tidak ada data",
+        "info": "Halaman _PAGE_ dari _PAGES_",
+        "infoEmpty": "Data kosong",
+        "paginate": { "previous": "Kembali", "next": "Lanjut" }
+      }
+    });
+
+    table.on('order.dt search.dt', function () {
+        let i = 1;
+        table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+            this.data(i++);
+        });
+    }).draw();
+
+    $('#filterPML').on('change', function() { table.column(2).search($(this).val()).draw(); });
+    $('#filterPCL').on('change', function() { table.column(1).search($(this).val()).draw(); });
+  }
+
+  function resetTop5View() {
+    let items = $('.pml-item');
+    items.hide(); 
+    items.slice(0, 5).fadeIn();
+    
+    if (items.length > 5) {
+      $('#btnSeeMoreContainer').show();
+    } else {
+      $('#btnSeeMoreContainer').hide();
+    }
+  }
+
+  function bukaModalDetail(index) {
+    let data = window.pclDataMap[index];
+    
+    let modalHtml = `
+      <tr><th>Nama PCL</th><td class="text-primary">${data.namaPCL}</td></tr>
+      <tr><th>Nama PML</th><td>${data.namaPML}</td></tr>
+      <tr><th>PROGRESS</th><td class="text-success fs-5">${data.progress}</td></tr>
+      <tr><th>Jumlah SLS</th><td>${data.jmlSls}</td></tr>
+      <tr><th>Total Unit Pendataan</th><td>${data.totalUnit}</td></tr>
+      <tr><th>Belum Didata</th><td class="text-danger">${data.belum}</td></tr>
+      <tr><th>Sedang Didata</th><td class="text-warning">${data.sedang}</td></tr>
+      <tr><th>Selesai Didata</th><td class="text-success">${data.selesai}</td></tr>
+      <tr><th>Draft</th><td>${data.draft}</td></tr>
+      <tr><th>Submitted</th><td>${data.submitted}</td></tr>
+      <tr><th>Approved PML</th><td>${data.apprvPml}</td></tr>
+      <tr><th>Approved Kab/Kot</th><td>${data.apprvKabkot}</td></tr>
+    `;
+    
+    $('#modalBodyContent').html(modalHtml);
+    var detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+    detailModal.show();
+  }
+</script>
+
+</body>
+</html>
