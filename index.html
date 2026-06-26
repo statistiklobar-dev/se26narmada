@@ -268,7 +268,7 @@
 
 <script>
   // ==============================================================
-  // Masukkan URL Web App Apps Script Anda di bawah ini
+  // Ganti URL ini dengan URL Web App Hasil Exec Deploy Baru Anda
   // ==============================================================
   const API_URL = "https://script.google.com/macros/s/AKfycbxuJzcnZJByC9E4NcCfgHkpt4IGcOg_0bpLaGyype9Ww-777qi1cdZ8t3desyoEPWE/exec"; 
   
@@ -327,14 +327,13 @@
   function fetchData() {
     fetch(API_URL)
       .then(response => {
-        if (!response.ok) throw new Error("Jaringan bermasalah atau URL API Web App salah.");
+        if (!response.ok) throw new Error("Jaringan bermasalah atau API mengembalikan error.");
         return response.json();
       })
       .then(data => processData(data))
-      .catch(err => $('#loader').html(`<div class="alert alert-danger">Gagal memuat data: ${err.message}</div>`));
+      .catch(err => $('#loader').html(`<div class="alert alert-danger">Gagal memuat data: ${err.message}<br><small>Pastikan Anda sudah me-redeploy Apps Script ke versi baru (New Version) jika baru merubah kode.</small></div>`));
   }
 
-  // Fungsi pengubah string persentase menjadi float yang aman
   function formatProgress(val) {
     if (val === undefined || val === null) return "0.00";
     let str = val.toString().trim();
@@ -351,10 +350,9 @@
 
   function processData(data) {
     if(data.error) {
-      $('#loader').html(`<div class="alert alert-danger">Error Backend: ${data.error}</div>`); return;
+      $('#loader').html(`<div class="alert alert-danger">Error Sistem Backend: ${data.error}<br><small>Solusi: Pastikan akun Google pemilik Apps Script memiliki akses minimal 'Pelihat/Viewer' ke Google Sheet.</small></div>`); return;
     }
 
-    // Mengambil kondisi update dari baris pertama jika tersedia
     let kondisiVal = (data[0] && data[0]['Kondisi']) ? data[0]['Kondisi'] : "Belum ada catatan kondisi terbaru.";
     $('#kondisiUpdate').html(`<b>Kondisi Update :</b> ${kondisiVal}`);
 
@@ -376,7 +374,6 @@
       pmlMap[pml].push(row);
     });
 
-    // Mengisi pilihan filter drop-down
     Array.from(uniquePMLs).sort().forEach(p => $('#filterPML').append(`<option value="${p}">${p}</option>`));
     Array.from(uniquePCLs).sort().forEach(p => $('#filterPCL').append(`<option value="${p}">${p}</option>`));
 
@@ -397,7 +394,6 @@
         sumApprovedPml += parseInt(pcl['approved_by_pml']) || 0;
       });
 
-      // Urutkan PCL di dalam grup PML berdasarkan jumlah yang disetujui (Ascending)
       pcls.sort((a, b) => {
         let appA = parseInt(a['approved_by_pml']) || 0;
         let appB = parseInt(b['approved_by_pml']) || 0;
@@ -422,7 +418,6 @@
           rowBgClass = "table-danger";  
         }
 
-        // Mapping aman seluruh data kolom baru ke dalam window map untuk Modal Detail
         let detailData = {
           namaPCL: pcl['Nama PCL'] || '-',
           emailPCL: pcl['Email PCL'] || '-',
@@ -431,7 +426,7 @@
           kecKode: pcl['KecKode'] || '-',
           jumlahSls: pcl['jumlah_sls'] || '0',
           totalUnit: pcl['total_unit_pendataan'] || '0',
-          totalTargetUsaha: pcl['total_target-total_jumlah_usaha'] || '0', // Bracket notation handling
+          totalTargetUsaha: pcl['total_target-total_jumlah_usaha'] || '0', 
           totalProgres: pcl['total_progres'] || '0',
           persenSedang: pcl['persen_sedang'] || '0%',
           persenSelesai: pcl['persen_selesai'] || '0%',
@@ -458,7 +453,6 @@
           </div>
         `;
 
-        // Baris untuk tabel mini di dalam Accordion
         pclTableRows += `
           <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik untuk detail">
             <td class="text-center fw-bold align-middle">${indexUrut + 1}</td>
@@ -472,7 +466,6 @@
           </tr>
         `;
 
-        // Baris untuk Datatable utama (Keseluruhan)
         mainTableHtml += `
           <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik untuk detail lengkap">
             <td class="text-center fw-bold align-middle"></td> 
@@ -537,7 +530,6 @@
       collapseIdCounter++;
     }
 
-    // Urutkan grup PML berdasarkan total unit yang disetujui terbanyak (Descending)
     pmlArray.sort((a, b) => b.totalSelesai - a.totalSelesai);
 
     $('#pmlAccordion').html(pmlArray.map(item => item.html).join(''));
@@ -548,9 +540,8 @@
     $('#loader').hide();
     $('#mainContent').fadeIn();
 
-    // Inisialisasi jQuery DataTables tingkat lanjut
     var table = $('#pclTable').DataTable({
-      "order": [[ 9, "asc" ]], // Default sortir berdasarkan Approved PML paling rendah
+      "order": [[ 9, "asc" ]], 
       "pageLength": 15,
       "language": {
         "search": "Cari Data PCL/PML:",
@@ -562,7 +553,6 @@
       }
     });
 
-    // Menghasilkan nomor baris otomatis di DataTable
     table.on('order.dt search.dt', function () {
         let i = 1;
         table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
@@ -570,7 +560,6 @@
         });
     }).draw();
 
-    // Integrasi filter khusus kustom
     $('#filterPML').on('change', function() { table.column(2).search($(this).val()).draw(); });
     $('#filterPCL').on('change', function() { table.column(1).search($(this).val()).draw(); });
   }
@@ -584,7 +573,6 @@
     else { $('#btnSeeMoreContainer').hide(); }
   }
 
-  // Fungsi pembuka Modal Bootstrap untuk menyajikan seluruh 22 kolom variabel baru
   function bukaModalDetail(index) {
     let data = window.pclDataMap[index];
     
