@@ -268,7 +268,7 @@
 
 <script>
   // ==============================================================
-  // Ganti URL ini dengan URL Web App Hasil Exec Deploy Baru Anda
+  // Ganti URL ini dengan URL Web App Hasil Exec Deploy Anda (tidak perlu diubah jika URL tidak berubah)
   // ==============================================================
   const API_URL = "https://script.google.com/macros/s/AKfycbxuJzcnZJByC9E4NcCfgHkpt4IGcOg_0bpLaGyype9Ww-777qi1cdZ8t3desyoEPWE/exec"; 
   
@@ -350,7 +350,7 @@
 
   function processData(data) {
     if(data.error) {
-      $('#loader').html(`<div class="alert alert-danger">Error Sistem Backend: ${data.error}<br><small>Solusi: Pastikan akun Google pemilik Apps Script memiliki akses minimal 'Pelihat/Viewer' ke Google Sheet.</small></div>`); return;
+      $('#loader').html(`<div class="alert alert-danger">Error Sistem Backend: ${data.error}<br><small>Solusi: Pastikan ID Spreadsheet benar dan telah dideploy menggunakan New Version.</small></div>`); return;
     }
 
     let kondisiVal = (data[0] && data[0]['Kondisi']) ? data[0]['Kondisi'] : "Belum ada catatan kondisi terbaru.";
