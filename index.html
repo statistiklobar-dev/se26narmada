@@ -84,9 +84,17 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
     .accordion-button {
-      background-color: #fcfcfc;
       padding: 15px 20px;
     }
+    
+    /* MODIFIKASI: Warna selang-seling (Zebra striping) untuk Accordion PML */
+    .accordion-item:nth-child(odd) .accordion-button.collapsed {
+      background-color: #ffffff;
+    }
+    .accordion-item:nth-child(even) .accordion-button.collapsed {
+      background-color: #fff4ea; /* Oranye sangat tipis */
+    }
+    
     .accordion-button:not(.collapsed) {
       background-color: var(--light-orange);
       color: #333;
@@ -292,12 +300,12 @@
   let isExpanded = false;
   window.pclDataMap = []; 
   
-  // URL API Google Apps Script (Sesuai yang Anda berikan)
+  // URL API Google Apps Script
   const API_URL = 'https://script.google.com/a/macros/statslobar.info/s/AKfycbxuJzcnZJByC9E4NcCfgHkpt4IGcOg_0bpLaGyype9Ww-777qi1cdZ8t3desyoEPWE/exec';
 
   $(document).ready(function() {
     calculateCountdown();
-    fetchData(); // Sekarang menggunakan fetch web standar
+    fetchData(); 
 
     $('#btnToggleView').click(function() {
       if (!isExpanded) {
@@ -348,7 +356,7 @@
     return dayDiff * 12;
   }
 
-  // 3. Panggil Data via Fetch API ke Google Apps Script URL
+  // 3. Panggil Data via Fetch API
   function fetchData() {
     fetch(API_URL)
       .then(response => {
