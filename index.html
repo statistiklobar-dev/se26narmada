@@ -2,7 +2,6 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitoring Sensus Ekonomi 2026</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,6 +16,7 @@
       --dark-orange: #d84a00;
     }
     body {
+      /* Background Warna Gradien Oranye */
       background: linear-gradient(135deg, #F26522 0%, #ff8c5a 100%);
       background-attachment: fixed;
       font-family: 'Poppins', sans-serif;
@@ -50,7 +50,7 @@
       border-radius: 8px;
       color: var(--dark-orange);
       text-align: center;
-      max-width: 650px;
+      max-width: 550px;
       margin: 15px auto;
       font-size: 0.95rem;
     }
@@ -76,6 +76,8 @@
       font-weight: 600;
       font-size: 1.3rem;
     }
+    
+    /* Modern Accordion */
     .accordion-item {
       border: 1px solid #eee;
       border-radius: 10px !important;
@@ -101,9 +103,14 @@
       background-color: #fff;
       border: 1px solid #e0e0e0;
       color: #555;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
+    
+    /* Modern Table & Freeze Header Setup */
     .table-responsive {
-      max-height: 70vh;
+      max-height: 70vh; 
       overflow-y: auto;
     }
     .custom-table {
@@ -112,29 +119,32 @@
       width: 100%;
       border-radius: 10px;
       border: 1px solid #eaedf1;
+      font-size: 0.85rem;
     }
     .custom-table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      position: sticky; 
+      top: 0;           
+      z-index: 10;      
       background-color: var(--light-orange) !important;
       color: var(--dark-orange);
       font-weight: 600;
       border-bottom: none;
-      padding: 12px 15px;
+      padding: 10px 12px;
       white-space: nowrap;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
     }
     .custom-table tbody td {
-      padding: 12px 15px;
+      padding: 10px 12px;
       vertical-align: middle;
       border-bottom: 1px solid #eaedf1;
       color: #4a5568;
       white-space: nowrap;
     }
+    /* Hover effect general */
     .custom-table tbody tr:not(.table-success):not(.table-danger):hover { background-color: #fff3ed !important; }
     .custom-table tbody tr:last-child td { border-bottom: none; }
     
+    /* Hover effect for clickable rows with specific colors */
     .clickable-row {
       cursor: pointer;
       transition: background-color 0.2s ease, filter 0.2s ease;
@@ -142,18 +152,22 @@
     .clickable-row:hover {
       filter: brightness(0.95);
     }
+
+    /* Modal Custom Styling */
     .modal-detail-table th {
       color: #666;
       font-weight: 600;
       width: 45%;
       border: none !important;
       padding: 10px 15px;
+      font-size: 0.9rem;
     }
     .modal-detail-table td {
       color: #222;
       font-weight: 600;
       border: none !important;
       padding: 10px 15px;
+      font-size: 0.9rem;
     }
     .modal-detail-table tr {
       border-bottom: 1px solid #f0f0f0;
@@ -164,6 +178,8 @@
       border-bottom: none;
       padding-bottom: 0;
     }
+    
+    /* Badge Target Custom Styling */
     .target-badge {
       font-size: 0.75rem;
       padding: 4px 8px;
@@ -176,70 +192,82 @@
 </head>
 <body>
 
-<div class="container main-container">
-  
-  <h2 class="header-title">Monitoring Petugas Sensus Ekonomi 2026<br>Kecamatan Narmada Kabupaten Lombok Barat</h2>
-  <h5 class="subtitle">Pendataan 15 Juni 2026 hingga 31 Agustus 2026</h5>
-  
-  <div class="status-card" id="statusArea">
-    <div id="countdownText"><i class="fa-solid fa-clock"></i> Menghitung sisa waktu...</div>
-    <div class="kondisi" id="kondisiUpdate">Kondisi Update : Mengambil data...</div>
-    <div class="target-text">Target harian yang harus dicapai adalah 12 Keluarga/Usaha/Bangunan per hari (status disetujui PML)</div>
-  </div>
-
-  <div id="loader" class="text-center my-5">
-    <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status"></div>
-    <h5 class="mt-3" style="color: white;">Sinkronisasi data dari Google Sheets...</h5>
-  </div>
-
-  <div id="mainContent" style="display: none;">
+<div class="container-fluid px-md-5">
+  <div class="main-container">
     
-    <h4 class="section-title"><i class="fa-solid fa-users-gear"></i> Ringkasan Progress per PML</h4>
-    <div class="accordion mb-3" id="pmlAccordion"></div>
-    <div class="text-center mt-3 mb-5" id="btnSeeMoreContainer" style="display: none;">
-      <button id="btnToggleView" class="btn btn-outline-warning rounded-pill px-4 fw-bold" style="color: var(--primary-orange); border-color: var(--primary-orange); background-color: #fff;">
-        Lihat Selengkapnya <i class="fa-solid fa-chevron-down ms-1"></i>
-      </button>
-    </div>
-
-    <h4 class="section-title"><i class="fa-solid fa-table-list"></i> Detail Progress Keseluruhan PCL</h4>
+    <h2 class="header-title">Monitoring Petugas Sensus Ekonomi 2026<br>Kecamatan Narmada Kabupaten Lombok Barat</h2>
+    <h5 class="subtitle">Pendataan 15 Juni 2026 hingga 31 Agustus 2026</h5>
     
-    <div class="row mb-3">
-      <div class="col-md-6 mb-2">
-        <label class="form-label fw-bold text-secondary small">Filter Nama PML</label>
-        <select id="filterPML" class="form-select border-warning">
-          <option value="">-- Semua PML --</option>
-        </select>
-      </div>
-      <div class="col-md-6 mb-2">
-        <label class="form-label fw-bold text-secondary small">Filter Nama PCL</label>
-        <select id="filterPCL" class="form-select border-warning">
-          <option value="">-- Semua PCL --</option>
-        </select>
-      </div>
+    <div class="status-card" id="statusArea">
+      <div id="countdownText"><i class="fa-solid fa-clock"></i> Menghitung sisa waktu...</div>
+      <div class="kondisi" id="kondisiUpdate">Kondisi Update : Mengambil data...</div>
+      <div class="target-text">Target harian yang harus dicapai adalah 12 Keluarga/Usaha/Bangunan per hari (status sudah disubmit)</div>
     </div>
 
-    <div class="table-responsive">
-      <table id="pclTable" class="table custom-table table-hover" style="width:100%">
-        <thead>
-          <tr>
-            <th class="text-center">No</th>
-            <th>Nama PCL</th>
-            <th>Nama PML</th>
-            <th>PROGRESS</th>
-            <th>Jml SLS</th>
-            <th>Total Unit</th>
-            <th>Open</th>
-            <th>Draft</th>
-            <th>Submit PPL</th>
-            <th>Apprv PML</th>
-            <th>Apprv KabKot</th>
-          </tr>
-        </thead>
-        <tbody id="pclTableBody"></tbody>
-      </table>
+    <div id="loader" class="text-center my-5">
+      <div class="spinner-border text-warning" style="width: 3rem; height: 3rem;" role="status"></div>
+      <h5 class="mt-3 text-secondary">Sinkronisasi data...</h5>
     </div>
 
+    <div id="mainContent" style="display: none;">
+      
+      <h4 class="section-title"><i class="fa-solid fa-users-gear"></i> Ringkasan Progress per PML</h4>
+      
+      <div class="accordion mb-3" id="pmlAccordion"></div>
+      
+      <div class="text-center mt-3 mb-5" id="btnSeeMoreContainer" style="display: none;">
+        <button id="btnToggleView" class="btn btn-outline-warning rounded-pill px-4 fw-bold" style="color: var(--primary-orange); border-color: var(--primary-orange); background-color: #fff;">
+          Lihat Selengkapnya <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+      </div>
+
+      <h4 class="section-title"><i class="fa-solid fa-table-list"></i> Detail Progress Keseluruhan PCL</h4>
+      
+      <div class="row mb-3">
+        <div class="col-md-6 mb-2">
+          <label class="form-label fw-bold text-secondary small">Filter Nama PML</label>
+          <select id="filterPML" class="form-select border-warning">
+            <option value="">-- Semua PML --</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-2">
+          <label class="form-label fw-bold text-secondary small">Filter Nama PCL</label>
+          <select id="filterPCL" class="form-select border-warning">
+            <option value="">-- Semua PCL --</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="pclTable" class="table custom-table table-hover" style="width:100%">
+          <thead>
+            <tr>
+              <th class="text-center">No</th>
+              <th>Nama PCL</th>
+              <th>Nama PML</th>
+              <th>PROGRES (%)</th>
+              <th>Jml SLS</th>
+              <th>Target</th>
+              <th>Unit Pend.</th>
+              <th>Open</th>
+              <th>Draft</th>
+              <th>Sub. PPL</th>
+              <th>Sub. Resp</th>
+              <th>Edit PML</th>
+              <th>Apprv PML</th>
+              <th>Rej. PML</th>
+              <th>Rev. PML</th>
+              <th>Apprv Admin</th>
+              <th>Rej. Admin</th>
+              <th>Selesai Data</th>
+              <th>Jml Usaha</th>
+            </tr>
+          </thead>
+          <tbody id="pclTableBody"></tbody>
+        </table>
+      </div>
+
+    </div> 
   </div>
 </div>
 
@@ -253,7 +281,8 @@
       <div class="modal-body p-4 pt-2">
         <div class="table-responsive">
           <table class="table modal-detail-table">
-            <tbody id="modalBodyContent"></tbody>
+            <tbody id="modalBodyContent">
+              </tbody>
           </table>
         </div>
       </div>
@@ -267,11 +296,6 @@
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
-  // ==============================================================
-  // Ganti URL ini dengan URL Web App Hasil Exec Deploy Anda (tidak perlu diubah jika URL tidak berubah)
-  // ==============================================================
-  const API_URL = "https://script.google.com/macros/s/AKfycbxuJzcnZJByC9E4NcCfgHkpt4IGcOg_0bpLaGyype9Ww-777qi1cdZ8t3desyoEPWE/exec"; 
-  
   let isExpanded = false;
   window.pclDataMap = []; 
 
@@ -292,6 +316,7 @@
     });
   });
 
+  // 1. Hitung Sisa Hari Pendataan
   function calculateCountdown() {
     const endDate = new Date("August 31, 2026 23:59:59").getTime();
     const now = new Date().getTime();
@@ -306,54 +331,57 @@
     $('#countdownText').html(`<i class="fa-solid fa-calendar-days"></i> ${countdownText}`);
   }
 
+  // 2. Hitung Target Kumulatif per hari ini
   function getTargetKumulatif() {
-    let startDate = new Date(2026, 5, 15); // 15 Juni 2026
+    let startDate = new Date(2026, 5, 15); 
     startDate.setHours(0,0,0,0);
+    
     let today = new Date();
     today.setHours(0,0,0,0);
     
     if (today < startDate) return 0;
     
-    let endDate = new Date(2026, 7, 31); // 31 Agustus 2026
+    let endDate = new Date(2026, 7, 31); 
     endDate.setHours(0,0,0,0);
     
     let calcDate = today > endDate ? endDate : today;
+    
     let timeDiff = calcDate - startDate;
     let dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1;
     
     return dayDiff * 12;
   }
 
+  // 3. Panggil GS Data
   function fetchData() {
-    fetch(API_URL)
-      .then(response => {
-        if (!response.ok) throw new Error("Jaringan bermasalah atau API mengembalikan error.");
-        return response.json();
-      })
-      .then(data => processData(data))
-      .catch(err => $('#loader').html(`<div class="alert alert-danger">Gagal memuat data: ${err.message}<br><small>Pastikan Anda sudah me-redeploy Apps Script ke versi baru (New Version) jika baru merubah kode.</small></div>`));
+    google.script.run
+      .withSuccessHandler(processData)
+      .withFailureHandler(err => $('#loader').html(`<div class="alert alert-danger">Gagal memuat: ${err}</div>`))
+      .getSpreadsheetData();
   }
 
+  // Fungsi penyesuai Nilai Format Progres (mencegah error jika data kosong / format text)
   function formatProgress(val) {
-    if (val === undefined || val === null) return "0.00";
-    let str = val.toString().trim();
-    if (str.includes('%')) {
-      return parseFloat(str.replace('%', '')).toFixed(2);
-    }
-    let num = parseFloat(str.replace(',', '.'));
+    if (!val) return "0.00";
+    let valStr = val.toString().replace(',', '.');
+    let isPercentStr = valStr.includes('%');
+    let num = parseFloat(valStr.replace('%', ''));
     if (isNaN(num)) return "0.00";
-    if (num > 0 && num <= 1.0) {
-      return (num * 100).toFixed(2);
+    
+    // Jika format asli adalah 0.85, dikali 100. Jika 85 (atau "85%"), tetapkan 85
+    if (isPercentStr || num > 1) {
+      return num.toFixed(2);
     }
-    return num.toFixed(2);
+    return (num * 100).toFixed(2);
   }
 
+  // 4. Pengolahan Data Utama
   function processData(data) {
     if(data.error) {
-      $('#loader').html(`<div class="alert alert-danger">Error Sistem Backend: ${data.error}<br><small>Solusi: Pastikan ID Spreadsheet benar dan telah dideploy menggunakan New Version.</small></div>`); return;
+      $('#loader').html(`<div class="alert alert-danger">Error: ${data.error}</div>`); return;
     }
 
-    let kondisiVal = (data[0] && data[0]['Kondisi']) ? data[0]['Kondisi'] : "Belum ada catatan kondisi terbaru.";
+    let kondisiVal = (data[0] && data[0]['Kondisi']) ? data[0]['Kondisi'] : "Belum ada update kondisi.";
     $('#kondisiUpdate').html(`<b>Kondisi Update :</b> ${kondisiVal}`);
 
     let pmlMap = {};
@@ -367,7 +395,7 @@
       let pml = row['Nama PML'] || "Tanpa PML";
       let pcl = row['Nama PCL'] || "Tanpa PCL";
       
-      if(row['Nama PML']) uniquePMLs.add(pml);
+      uniquePMLs.add(pml);
       if(row['Nama PCL']) uniquePCLs.add(pcl);
 
       if (!pmlMap[pml]) pmlMap[pml] = [];
@@ -381,65 +409,83 @@
     let mainTableHtml = '';
     let collapseIdCounter = 1;
 
+    // Kalkulasi per PML
     for (const [pmlName, pcls] of Object.entries(pmlMap)) {
-      let sumSls = 0, sumTotal = 0, sumOpen = 0, sumDraft = 0, sumSubmitPpl = 0, sumApprovedPml = 0;
+      
+      // Variable Penampung Agregat PML
+      let sumSls = 0, sumTarget = 0, sumUnit = 0, sumOpen = 0, sumDraft = 0, sumSubmitPPL = 0;
+      let sumSubmitRes = 0, sumEditPML = 0, sumApprvPML = 0, sumRejPML = 0, sumRevPML = 0;
+      let sumApprvAdmin = 0, sumRejAdmin = 0, sumSelesai = 0, sumUsaha = 0;
+      
       let pclTableRows = '';
 
       pcls.forEach(pcl => {
-        sumSls += parseInt(pcl['jumlah_sls']) || 0;
-        sumTotal += parseInt(pcl['total_unit_pendataan']) || 0;
-        sumOpen += parseInt(pcl['open']) || 0;
-        sumDraft += parseInt(pcl['draft']) || 0;
-        sumSubmitPpl += parseInt(pcl['submit_by_ppl']) || 0;
-        sumApprovedPml += parseInt(pcl['approved_by_pml']) || 0;
+        sumSls        += parseInt(pcl['Jumlah SLS Diampu']) || 0;
+        sumTarget     += parseInt(pcl['Target']) || 0;
+        sumUnit       += parseInt(pcl['Unit Pendataan']) || 0;
+        sumOpen       += parseInt(pcl['Belum Diwawancara (Open)']) || 0;
+        sumDraft      += parseInt(pcl['Draft']) || 0;
+        sumSubmitPPL  += parseInt(pcl['Submit PPL']) || 0;
+        sumSubmitRes  += parseInt(pcl['Submit Responden']) || 0;
+        sumEditPML    += parseInt(pcl['Edit PML']) || 0;
+        sumApprvPML   += parseInt(pcl['Approved PML']) || 0;
+        sumRejPML     += parseInt(pcl['Rejected PML']) || 0;
+        sumRevPML     += parseInt(pcl['Revoked PML']) || 0;
+        sumApprvAdmin += parseInt(pcl['Approved Admin']) || 0;
+        sumRejAdmin   += parseInt(pcl['Rejected Admin']) || 0;
+        sumSelesai    += parseInt(pcl['Total Selesai Data']) || 0;
+        sumUsaha      += parseInt(pcl['Total Jumlah Usaha']) || 0;
       });
 
+      // Sort PCL di Akordion by Selesai Ascending
       pcls.sort((a, b) => {
-        let appA = parseInt(a['approved_by_pml']) || 0;
-        let appB = parseInt(b['approved_by_pml']) || 0;
-        return appA - appB;
+        return (parseInt(a['Total Selesai Data']) || 0) - (parseInt(b['Total Selesai Data']) || 0);
       });
 
       pcls.forEach((pcl, indexUrut) => {
-        let approvedPclCount = parseInt(pcl['approved_by_pml']) || 0;
-        let progFormatted = formatProgress(pcl['persen_keseluruhan']);
+        
+        let selesaiPcl = parseInt(pcl['Total Selesai Data']) || 0;
+        let progFormatted = formatProgress(pcl['Rata-rata Progres (%)']);
 
         let targetText = "";
         let badgeColor = "";
         let rowBgClass = "";
         
-        if (approvedPclCount >= currentTargetKumulatif) {
-          targetText = `Target tercapai (min. ${currentTargetKumulatif} Approved PML hari ini)`;
+        if (selesaiPcl >= currentTargetKumulatif) {
+          targetText = `Target tercapai min. ${currentTargetKumulatif} per hari ini`;
           badgeColor = "bg-success";   
           rowBgClass = "table-success"; 
         } else {
-          targetText = `Target kurang ${currentTargetKumulatif - approvedPclCount} unit untuk hari ini`;
+          targetText = `Target tidak tercapai min. ${currentTargetKumulatif} per hari ini`;
           badgeColor = "bg-danger";    
           rowBgClass = "table-danger";  
         }
 
+        // Object Detail PCL terbaru
         let detailData = {
           namaPCL: pcl['Nama PCL'] || '-',
           emailPCL: pcl['Email PCL'] || '-',
           namaPML: pmlName,
           emailPML: pcl['Email PML'] || '-',
           kecKode: pcl['KecKode'] || '-',
-          jumlahSls: pcl['jumlah_sls'] || '0',
-          totalUnit: pcl['total_unit_pendataan'] || '0',
-          totalTargetUsaha: pcl['total_target-total_jumlah_usaha'] || '0', 
-          totalProgres: pcl['total_progres'] || '0',
-          persenSedang: pcl['persen_sedang'] || '0%',
-          persenSelesai: pcl['persen_selesai'] || '0%',
-          persenKeseluruhan: progFormatted + '%',
-          open: pcl['open'] || '0',
-          draft: pcl['draft'] || '0',
-          submitPpl: pcl['submit_by_ppl'] || '0',
-          submitResponden: pcl['submit_by_responden'] || '0',
-          rejectedPml: pcl['rejected_by_pml'] || '0',
-          approvedPml: approvedPclCount,
-          editPml: pcl['edit_by_pml'] || '0',
-          revokedPml: pcl['revoked_by_pml'] || '0',
-          approvedKabkot: pcl['approved_by_adminkabkot'] || '0'
+          progress: progFormatted,
+          capaian: formatProgress(pcl['Rata-rata Capaian (%)']),
+          sls: pcl['Jumlah SLS Diampu'] || '0',
+          target: pcl['Target'] || '0',
+          unit: pcl['Unit Pendataan'] || '0',
+          open: pcl['Belum Diwawancara (Open)'] || '0',
+          draft: pcl['Draft'] || '0',
+          submitPPL: pcl['Submit PPL'] || '0',
+          submitRes: pcl['Submit Responden'] || '0',
+          editPML: pcl['Edit PML'] || '0',
+          apprvPML: pcl['Approved PML'] || '0',
+          rejPML: pcl['Rejected PML'] || '0',
+          revPML: pcl['Revoked PML'] || '0',
+          apprvAdmin: pcl['Approved Admin'] || '0',
+          rejAdmin: pcl['Rejected Admin'] || '0',
+          selesai: selesaiPcl,
+          usaha: pcl['Total Jumlah Usaha'] || '0',
+          anomali: pcl['Total Anomali'] || '0'
         };
         
         window.pclDataMap.push(detailData);
@@ -447,38 +493,58 @@
 
         let pclNameCellHtml = `
           <div class="text-primary fw-bold mb-1">${detailData.namaPCL} <i class="fa-solid fa-arrow-up-right-from-square text-muted ms-1" style="font-size: 0.7rem;"></i></div>
-          <div style="font-size: 0.8rem; color: #555;">
-            Total Progress Terdata: <b>${detailData.totalProgres}</b> unit<br>
+          <div style="font-size: 0.75rem; color: #555;">
+            Total Selesai Data saat ini: <b>${detailData.selesai}</b><br>
             <span class="target-badge text-white ${badgeColor}">${targetText}</span>
           </div>
         `;
 
+        // Baris HTML untuk Accordion (Tanpa Nama PML)
         pclTableRows += `
-          <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik untuk detail">
+          <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik lihat detail">
             <td class="text-center fw-bold align-middle">${indexUrut + 1}</td>
             <td>${pclNameCellHtml}</td>
-            <td class="fw-bold text-success align-middle">${progFormatted}%</td>
-            <td class="align-middle">${detailData.jumlahSls}</td>
-            <td class="align-middle">${detailData.totalUnit}</td>
-            <td class="align-middle">${detailData.open}</td>
-            <td class="align-middle">${detailData.draft}</td>
-            <td class="align-middle">${detailData.approvedPml}</td>
+            <td class="fw-bold text-success align-middle text-center">${progFormatted}</td>
+            <td class="align-middle text-center">${detailData.sls}</td>
+            <td class="align-middle text-center">${detailData.target}</td>
+            <td class="align-middle text-center">${detailData.unit}</td>
+            <td class="align-middle text-center">${detailData.open}</td>
+            <td class="align-middle text-center">${detailData.draft}</td>
+            <td class="align-middle text-center">${detailData.submitPPL}</td>
+            <td class="align-middle text-center">${detailData.submitRes}</td>
+            <td class="align-middle text-center">${detailData.editPML}</td>
+            <td class="align-middle text-center">${detailData.apprvPML}</td>
+            <td class="align-middle text-center">${detailData.rejPML}</td>
+            <td class="align-middle text-center">${detailData.revPML}</td>
+            <td class="align-middle text-center">${detailData.apprvAdmin}</td>
+            <td class="align-middle text-center">${detailData.rejAdmin}</td>
+            <td class="align-middle text-center fw-bold">${detailData.selesai}</td>
+            <td class="align-middle text-center">${detailData.usaha}</td>
           </tr>
         `;
 
+        // Baris HTML untuk Main Table
         mainTableHtml += `
-          <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik untuk detail lengkap">
+          <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik lihat detail">
             <td class="text-center fw-bold align-middle"></td> 
             <td>${pclNameCellHtml}</td>
             <td class="align-middle fw-bold">${pmlName}</td>
-            <td class="fw-bold text-success align-middle">${progFormatted}%</td>
-            <td class="align-middle">${detailData.jumlahSls}</td>
-            <td class="align-middle">${detailData.totalUnit}</td>
-            <td class="align-middle">${detailData.open}</td>
-            <td class="align-middle">${detailData.draft}</td>
-            <td class="align-middle">${detailData.submitPpl}</td>
-            <td class="align-middle">${detailData.approvedPml}</td>
-            <td class="align-middle">${detailData.approvedKabkot}</td>
+            <td class="fw-bold text-success align-middle text-center">${progFormatted}</td>
+            <td class="align-middle text-center">${detailData.sls}</td>
+            <td class="align-middle text-center">${detailData.target}</td>
+            <td class="align-middle text-center">${detailData.unit}</td>
+            <td class="align-middle text-center">${detailData.open}</td>
+            <td class="align-middle text-center">${detailData.draft}</td>
+            <td class="align-middle text-center">${detailData.submitPPL}</td>
+            <td class="align-middle text-center">${detailData.submitRes}</td>
+            <td class="align-middle text-center">${detailData.editPML}</td>
+            <td class="align-middle text-center">${detailData.apprvPML}</td>
+            <td class="align-middle text-center">${detailData.rejPML}</td>
+            <td class="align-middle text-center">${detailData.revPML}</td>
+            <td class="align-middle text-center">${detailData.apprvAdmin}</td>
+            <td class="align-middle text-center">${detailData.rejAdmin}</td>
+            <td class="align-middle text-center fw-bold">${detailData.selesai}</td>
+            <td class="align-middle text-center">${detailData.usaha}</td>
           </tr>
         `;
       });
@@ -491,14 +557,25 @@
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
               <div class="d-flex flex-column w-100 me-3">
                 <div class="fs-5 fw-bold text-dark"><i class="fa-solid fa-user-tie text-secondary me-2"></i> ${pmlName}</div>
+                
                 <div class="d-flex flex-wrap gap-2 mt-2">
-                  <span class="stat-badge"><i class="fa-solid fa-map-location-dot text-primary"></i> SLS: <b>${sumSls}</b></span>
-                  <span class="stat-badge"><i class="fa-solid fa-building text-info"></i> Unit: <b>${sumTotal}</b></span>
-                  <span class="stat-badge"><i class="fa-solid fa-folder-open text-secondary"></i> Open: <b>${sumOpen}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-map"></i> SLS: <b>${sumSls}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-bullseye text-primary"></i> Target: <b>${sumTarget}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-building text-info"></i> Unit: <b>${sumUnit}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-folder-open text-danger"></i> Open: <b>${sumOpen}</b></span>
                   <span class="stat-badge"><i class="fa-solid fa-file-pen text-warning"></i> Draft: <b>${sumDraft}</b></span>
-                  <span class="stat-badge bg-info text-white border-info"><i class="fa-solid fa-paper-plane"></i> Submit PPL: <b>${sumSubmitPpl}</b></span>
-                  <span class="stat-badge bg-success text-white border-success"><i class="fa-solid fa-square-check"></i> Apprv PML: <b>${sumApprovedPml}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-paper-plane text-primary"></i> Sub. PPL: <b>${sumSubmitPPL}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-users text-primary"></i> Sub. Resp: <b>${sumSubmitRes}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-pen-to-square text-secondary"></i> Edit PML: <b>${sumEditPML}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-check text-success"></i> App. PML: <b>${sumApprvPML}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-xmark text-danger"></i> Rej. PML: <b>${sumRejPML}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-arrow-rotate-left text-warning"></i> Rev. PML: <b>${sumRevPML}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-check-double text-success"></i> App. Admin: <b>${sumApprvAdmin}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-ban text-danger"></i> Rej. Admin: <b>${sumRejAdmin}</b></span>
+                  <span class="stat-badge bg-success text-white border-success"><i class="fa-solid fa-check-circle text-white"></i> Total Selesai: <b>${sumSelesai}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-store text-dark"></i> Total Usaha: <b>${sumUsaha}</b></span>
                 </div>
+                
               </div>
             </button>
           </h2>
@@ -510,12 +587,22 @@
                     <tr>
                       <th class="text-center">No</th>
                       <th>Nama PCL</th>
-                      <th>PROGRESS</th>
+                      <th>PROGRES (%)</th>
                       <th>Jml SLS</th>
-                      <th>Total Unit</th>
+                      <th>Target</th>
+                      <th>Unit Pend.</th>
                       <th>Open</th>
                       <th>Draft</th>
+                      <th>Sub. PPL</th>
+                      <th>Sub. Resp</th>
+                      <th>Edit PML</th>
                       <th>Apprv PML</th>
+                      <th>Rej. PML</th>
+                      <th>Rev. PML</th>
+                      <th>Apprv Admin</th>
+                      <th>Rej. Admin</th>
+                      <th>Selesai Data</th>
+                      <th>Jml Usaha</th>
                     </tr>
                   </thead>
                   <tbody>${pclTableRows}</tbody>
@@ -526,10 +613,11 @@
         </div>
       `;
       
-      pmlArray.push({ html: htmlItem, totalSelesai: sumApprovedPml });
+      pmlArray.push({ html: htmlItem, totalSelesai: sumSelesai });
       collapseIdCounter++;
     }
 
+    // Sort PML by Selesai Descending
     pmlArray.sort((a, b) => b.totalSelesai - a.totalSelesai);
 
     $('#pmlAccordion').html(pmlArray.map(item => item.html).join(''));
@@ -540,16 +628,17 @@
     $('#loader').hide();
     $('#mainContent').fadeIn();
 
+    // DataTables Initialization: Sort pada Kolom Index ke-17 (Selesai Data)
     var table = $('#pclTable').DataTable({
-      "order": [[ 9, "asc" ]], 
+      "order": [[ 17, "desc" ]], 
       "pageLength": 15,
       "language": {
-        "search": "Cari Data PCL/PML:",
-        "lengthMenu": "Tampilkan _MENU_ baris",
-        "zeroRecords": "Data tidak ditemukan",
-        "info": "Menampilkan halaman _PAGE_ dari _PAGES_",
-        "infoEmpty": "Tidak ada data tersedia",
-        "paginate": { "previous": "Sebelumnya", "next": "Selanjutnya" }
+        "search": "Cari Data:",
+        "lengthMenu": "Tampil _MENU_ data",
+        "zeroRecords": "Tidak ada data",
+        "info": "Halaman _PAGE_ dari _PAGES_",
+        "infoEmpty": "Data kosong",
+        "paginate": { "previous": "Kembali", "next": "Lanjut" }
       }
     });
 
@@ -568,39 +657,46 @@
     let items = $('.pml-item');
     items.hide(); 
     items.slice(0, 5).fadeIn();
-    
-    if (items.length > 5) { $('#btnSeeMoreContainer').show(); } 
-    else { $('#btnSeeMoreContainer').hide(); }
+    if (items.length > 5) {
+      $('#btnSeeMoreContainer').show();
+    } else {
+      $('#btnSeeMoreContainer').hide();
+    }
   }
 
   function bukaModalDetail(index) {
     let data = window.pclDataMap[index];
     
     let modalHtml = `
-      <tr><th>Nama PCL</th><td class="text-primary fw-bold">${data.namaPCL} (${data.emailPCL})</td></tr>
-      <tr><th>Nama PML</th><td class="fw-bold">${data.namaPML} (${data.emailPML})</td></tr>
-      <tr><th>Kode Kecamatan (KecKode)</th><td><span class="badge bg-secondary px-2 py-1">${data.kecKode}</span></td></tr>
-      <tr class="table-light"><th>PROGRESS KESELURUHAN</th><td class="text-success fs-5 fw-bold">${data.persenKeseluruhan}</td></tr>
-      <tr><th>Persen Sedang Didata</th><td>${data.persenSedang}</td></tr>
-      <tr><th>Persen Selesai Didata</th><td>${data.persenSelesai}</td></tr>
-      <tr><th>Jumlah SLS</th><td><b>${data.jumlahSls}</b> SLS</td></tr>
-      <tr><th>Total Unit Pendataan</th><td><b>${data.totalUnit}</b> Bangunan/Keluarga</td></tr>
-      <tr><th>Total Target / Jumlah Usaha</th><td><b>${data.totalTargetUsaha}</b></td></tr>
-      <tr><th>Total Volume Progress (Count)</th><td><span class="badge bg-dark">${data.totalProgres}</span></td></tr>
+      <tr><th>Nama PCL</th><td class="text-primary">${data.namaPCL} <br><small class="text-muted">${data.emailPCL}</small></td></tr>
+      <tr><th>Nama PML</th><td>${data.namaPML} <br><small class="text-muted">${data.emailPML}</small></td></tr>
+      <tr><th>Kode Kecamatan</th><td>${data.kecKode}</td></tr>
+      <tr><th>Rata-rata Progres (%)</th><td class="text-success fs-5">${data.progress}</td></tr>
+      <tr><th>Rata-rata Capaian (%)</th><td class="text-info">${data.capaian}</td></tr>
       
-      <tr class="table-warning"><th colspan="2" class="text-dark fw-bold"><i class="fa-solid fa-bars-staggered"></i> BREAKDOWN STATUS DATA (DOCKING UNIT)</th></tr>
-      <tr><th>1. Open (Belum Diapa-apakan)</th><td class="text-secondary">${data.open}</td></tr>
-      <tr><th>2. Draft (Selesai Entri Kuesioner)</th><td class="text-warning">${data.draft}</td></tr>
-      <tr><th>3. Submit by PPL (Dikirim oleh PCL)</th><td class="text-info">${data.submitPpl}</td></tr>
-      <tr><th>4. Submit by Responden</th><td>${data.submitResponden}</td></tr>
-      <tr><th>5. Rejected by PML (Ditolak Pengawas)</th><td class="text-danger">${data.rejectedPml}</td></tr>
-      <tr><th>6. Approved by PML (Disetujui Pengawas)</th><td class="text-success fw-bold">${data.approvedPml}</td></tr>
-      <tr><th>7. Edit by PML</th><td>${data.editPml}</td></tr>
-      <tr><th>8. Revoked by PML</th><td>${data.revokedPml}</td></tr>
-      <tr><th>9. Approved by Admin Kab/Kot</th><td class="text-primary fw-bold">${data.approvedKabkot}</td></tr>
+      <tr><td colspan="2" class="bg-light text-center text-secondary py-1" style="font-size: 0.8rem;">DATA METRIK PENDATAAN</td></tr>
+      
+      <tr><th>Jumlah SLS Diampu</th><td>${data.sls}</td></tr>
+      <tr><th>Target</th><td>${data.target}</td></tr>
+      <tr><th>Unit Pendataan</th><td>${data.unit}</td></tr>
+      <tr><th>Belum Diwawancara (Open)</th><td class="text-danger">${data.open}</td></tr>
+      <tr><th>Draft</th><td class="text-warning">${data.draft}</td></tr>
+      <tr><th>Submit PPL</th><td>${data.submitPPL}</td></tr>
+      <tr><th>Submit Responden</th><td>${data.submitRes}</td></tr>
+      <tr><th>Edit PML</th><td>${data.editPML}</td></tr>
+      <tr><th>Approved PML</th><td class="text-success">${data.apprvPML}</td></tr>
+      <tr><th>Rejected PML</th><td class="text-danger">${data.rejPML}</td></tr>
+      <tr><th>Revoked PML</th><td class="text-warning">${data.revPML}</td></tr>
+      <tr><th>Approved Admin</th><td class="text-success">${data.apprvAdmin}</td></tr>
+      <tr><th>Rejected Admin</th><td class="text-danger">${data.rejAdmin}</td></tr>
+      <tr><th>Total Anomali</th><td class="text-danger">${data.anomali}</td></tr>
+      
+      <tr><th class="fs-6">Total Selesai Data</th><td class="text-success fw-bold fs-5">${data.selesai}</td></tr>
+      <tr><th class="fs-6">Total Jumlah Usaha</th><td class="text-dark fw-bold fs-6">${data.usaha}</td></tr>
     `;
     
     $('#modalBodyContent').html(modalHtml);
+    
     var detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
     detailModal.show();
   }
