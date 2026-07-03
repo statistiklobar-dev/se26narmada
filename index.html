@@ -145,7 +145,7 @@
       color: #4a5568;
       white-space: nowrap;
     }
-    .custom-table tbody tr:not(.table-success):not(.table-danger):hover { background-color: #fff3ed !important; }
+    .custom-table tbody tr:hover { background-color: #fff3ed !important; }
     .custom-table tbody tr:last-child td { border-bottom: none; }
     
     .clickable-row {
@@ -248,6 +248,8 @@
               <th>Nama PML</th>
               <th>PROGRES (%)</th>
               <th>Jml SLS</th>
+              <th>Selesai Data</th>
+              <th>Total SLS selesai</th>
               <th>Target</th>
               <th>Unit Pend.</th>
               <th>Open</th>
@@ -260,7 +262,6 @@
               <th>Rev. PML</th>
               <th>Apprv Admin</th>
               <th>Rej. Admin</th>
-              <th>Selesai Data</th>
               <th>Jml Usaha</th>
             </tr>
           </thead>
@@ -429,7 +430,7 @@
     for (const [pmlName, pcls] of Object.entries(pmlMap)) {
       let sumSls = 0, sumTarget = 0, sumUnit = 0, sumOpen = 0, sumDraft = 0, sumSubmitPPL = 0;
       let sumSubmitRes = 0, sumEditPML = 0, sumApprvPML = 0, sumRejPML = 0, sumRevPML = 0;
-      let sumApprvAdmin = 0, sumRejAdmin = 0, sumSelesai = 0, sumUsaha = 0;
+      let sumApprvAdmin = 0, sumRejAdmin = 0, sumSelesai = 0, sumUsaha = 0, sumTotSlsSelesai = 0;
       
       let pclTableRows = '';
 
@@ -448,6 +449,7 @@
         sumApprvAdmin += parseInt(pcl['Approved Admin']) || 0;
         sumRejAdmin   += parseInt(pcl['Rejected Admin']) || 0;
         sumSelesai    += parseInt(pcl['Total Selesai Data']) || 0;
+        sumTotSlsSelesai += parseInt(pcl['Total SLS selesai']) || 0;
         sumUsaha      += parseInt(pcl['Total Jumlah Usaha']) || 0;
       });
 
@@ -461,16 +463,13 @@
 
         let targetText = "";
         let badgeColor = "";
-        let rowBgClass = "";
         
         if (selesaiPcl >= currentTargetKumulatif) {
           targetText = `Target tercapai min. ${currentTargetKumulatif} per hari ini`;
           badgeColor = "bg-success";   
-          rowBgClass = "table-success"; 
         } else {
           targetText = `Target tidak tercapai min. ${currentTargetKumulatif} per hari ini`;
           badgeColor = "bg-danger";    
-          rowBgClass = "table-danger";  
         }
 
         let detailData = {
@@ -482,6 +481,7 @@
           progress: progFormatted,
           capaian: formatProgress(pcl['Rata-rata Capaian (%)']),
           sls: pcl['Jumlah SLS Diampu'] || '0',
+          totSlsSelesai: pcl['Total SLS selesai'] || '0',
           target: pcl['Target'] || '0',
           unit: pcl['Unit Pendataan'] || '0',
           open: pcl['Belum Diwawancara (Open)'] || '0',
@@ -511,11 +511,13 @@
         `;
 
         pclTableRows += `
-          <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik lihat detail">
+          <tr class="clickable-row" onclick="bukaModalDetail(${dataIndex})" title="Klik lihat detail">
             <td class="text-center fw-bold align-middle">${indexUrut + 1}</td>
             <td>${pclNameCellHtml}</td>
             <td class="fw-bold text-success align-middle text-center">${progFormatted}</td>
             <td class="align-middle text-center">${detailData.sls}</td>
+            <td class="align-middle text-center fw-bold">${detailData.selesai}</td>
+            <td class="align-middle text-center">${detailData.totSlsSelesai}</td>
             <td class="align-middle text-center">${detailData.target}</td>
             <td class="align-middle text-center">${detailData.unit}</td>
             <td class="align-middle text-center">${detailData.open}</td>
@@ -528,18 +530,19 @@
             <td class="align-middle text-center">${detailData.revPML}</td>
             <td class="align-middle text-center">${detailData.apprvAdmin}</td>
             <td class="align-middle text-center">${detailData.rejAdmin}</td>
-            <td class="align-middle text-center fw-bold">${detailData.selesai}</td>
             <td class="align-middle text-center">${detailData.usaha}</td>
           </tr>
         `;
 
         mainTableHtml += `
-          <tr class="clickable-row ${rowBgClass}" onclick="bukaModalDetail(${dataIndex})" title="Klik lihat detail">
+          <tr class="clickable-row" onclick="bukaModalDetail(${dataIndex})" title="Klik lihat detail">
             <td class="text-center fw-bold align-middle"></td> 
             <td>${pclNameCellHtml}</td>
             <td class="align-middle fw-bold">${pmlName}</td>
             <td class="fw-bold text-success align-middle text-center">${progFormatted}</td>
             <td class="align-middle text-center">${detailData.sls}</td>
+            <td class="align-middle text-center fw-bold">${detailData.selesai}</td>
+            <td class="align-middle text-center">${detailData.totSlsSelesai}</td>
             <td class="align-middle text-center">${detailData.target}</td>
             <td class="align-middle text-center">${detailData.unit}</td>
             <td class="align-middle text-center">${detailData.open}</td>
@@ -552,7 +555,6 @@
             <td class="align-middle text-center">${detailData.revPML}</td>
             <td class="align-middle text-center">${detailData.apprvAdmin}</td>
             <td class="align-middle text-center">${detailData.rejAdmin}</td>
-            <td class="align-middle text-center fw-bold">${detailData.selesai}</td>
             <td class="align-middle text-center">${detailData.usaha}</td>
           </tr>
         `;
@@ -569,6 +571,7 @@
                 
                 <div class="d-flex flex-wrap gap-2 mt-2">
                   <span class="stat-badge"><i class="fa-solid fa-map"></i> SLS: <b>${sumSls}</b></span>
+                  <span class="stat-badge"><i class="fa-solid fa-map-location-dot"></i> Total SLS Selesai: <b>${sumTotSlsSelesai}</b></span>
                   <span class="stat-badge"><i class="fa-solid fa-bullseye text-primary"></i> Target: <b>${sumTarget}</b></span>
                   <span class="stat-badge"><i class="fa-solid fa-building text-info"></i> Unit: <b>${sumUnit}</b></span>
                   <span class="stat-badge"><i class="fa-solid fa-folder-open text-danger"></i> Open: <b>${sumOpen}</b></span>
@@ -598,6 +601,8 @@
                       <th>Nama PCL</th>
                       <th>PROGRES (%)</th>
                       <th>Jml SLS</th>
+                      <th>Selesai Data</th>
+                      <th>Total SLS selesai</th>
                       <th>Target</th>
                       <th>Unit Pend.</th>
                       <th>Open</th>
@@ -610,7 +615,6 @@
                       <th>Rev. PML</th>
                       <th>Apprv Admin</th>
                       <th>Rej. Admin</th>
-                      <th>Selesai Data</th>
                       <th>Jml Usaha</th>
                     </tr>
                   </thead>
@@ -637,7 +641,7 @@
     $('#mainContent').fadeIn();
 
     var table = $('#pclTable').DataTable({
-      "order": [[ 17, "desc" ]], 
+      "order": [[ 5, "desc" ]], // Index 5 karena Selesai Data sekarang berada di kolom ke-6 (0,1,2,3,4,5)
       "pageLength": 15,
       "language": {
         "search": "Cari Data:",
@@ -684,6 +688,8 @@
       <tr><td colspan="2" class="bg-light text-center text-secondary py-1" style="font-size: 0.8rem;">DATA METRIK PENDATAAN</td></tr>
       
       <tr><th>Jumlah SLS Diampu</th><td>${data.sls}</td></tr>
+      <tr><th class="fs-6 text-dark">Total Selesai Data</th><td class="text-success fw-bold fs-5">${data.selesai}</td></tr>
+      <tr><th>Total SLS selesai</th><td>${data.totSlsSelesai}</td></tr>
       <tr><th>Target</th><td>${data.target}</td></tr>
       <tr><th>Unit Pendataan</th><td>${data.unit}</td></tr>
       <tr><th>Belum Diwawancara (Open)</th><td class="text-danger">${data.open}</td></tr>
@@ -698,7 +704,6 @@
       <tr><th>Rejected Admin</th><td class="text-danger">${data.rejAdmin}</td></tr>
       <tr><th>Total Anomali</th><td class="text-danger">${data.anomali}</td></tr>
       
-      <tr><th class="fs-6">Total Selesai Data</th><td class="text-success fw-bold fs-5">${data.selesai}</td></tr>
       <tr><th class="fs-6">Total Jumlah Usaha</th><td class="text-dark fw-bold fs-6">${data.usaha}</td></tr>
     `;
     
